@@ -1,59 +1,101 @@
 # Narke
 
-A Socratic review skill that turns assumed understanding into explicit questions and a one-page list of unknowns.
+理解したつもりの内容を具体的な問いに変え、最後に「わからないことリスト」を作る対話型レビューSkillです。
 
-**Status: concept and design stage.** The skill is not yet implemented or tested. Claude Code is the primary target; Codex support is planned.
+> **開発状況：構想・設計段階**  
+> Skill本体は未実装です。Claude Codeを主な対象とし、Codexにも対応する予定です。
 
-## What Narke does
+## Narkeとは
 
-Narke reviews documents you write, read, or evaluate. Through a dialogue, it helps you identify what you cannot yet explain, support, or decide.
+Narkeは、ユーザーが作成した資料、検討中の資料、読解中の資料を対象にします。対話を通じて、次の状態を区別します。
 
-It combines two perspectives:
+- ユーザーがまだ説明できないこと
+- 資料に説明がないこと
+- 根拠を確認できないこと
+- 判断がまだ決まっていないこと
+- レビューする側自身が理解できていないこと
 
-- **Fresh eyes:** ask what a reader needs to understand the document without sharing its unstated context.
-- **Philosophical review:** examine definitions, distinctions, assumptions, evidence, inferences, and counterexamples.
+レビューする側の理解不足を、ユーザーの無知とは扱いません。
 
-## The dialogue
+## 二つのレビュー視点
 
-1. Read the document and establish the purpose of the review.
-2. Ask a small set of questions tied to specific passages.
-3. Use your answers to refine the questions and recognize what has been resolved.
-4. Revisit both your assumptions and the reviewer's assumptions.
-5. Produce a one-page list of the remaining unknowns.
+### フレッシュアイレビュー
 
-The intended Claude Code command is:
+資料の読み手が共有していない前提を確認します。説明が不足している箇所や、読み手が迷う箇所を探します。
+
+### 哲学者レビュー
+
+次の点を確認します。
+
+- 用語の定義
+- 概念の区別
+- 隠れた前提
+- 根拠と証拠
+- 推論のつながり
+- 反例
+- 適用範囲
+
+二つの視点から得た問いを、同じ対話の中で扱います。
+
+## 対話の流れ
+
+1. 資料とレビューの目的を確認します。
+2. 資料中の具体的な文や節に結び付けて、2〜4個程度の問いを出します。
+3. 回答を受けて、問いを深掘りします。
+4. 解決した問いを未解決の問いから外します。
+5. ユーザーの前提とレビューする側の前提を、必要に応じて再検討します。
+6. 最後に、残った「わからないこと」を重要度順にまとめます。
+
+想定するClaude Codeでの呼び出し方は、次のとおりです。
 
 ```
 /narke
 ```
 
-Once implemented and installed, you will be able to provide a document or identify material already available in the conversation.
+呼び出し方とインストール方法は、実装と検証が完了した後に確定します。
 
-## The result
+## 最終出力
 
-The final list will contain concise questions, their locations in the source, and the checks needed to answer them. Resolved questions will not remain on the unresolved list.
+最終出力は、一枚に収まる分量を目標にします。各項目には、次の内容を含めます。
 
-Narke will distinguish a gap in your understanding from a gap in the document, missing evidence, an undecided choice, or a limitation in the reviewer's own understanding.
+- 問い
+- 資料の該当箇所
+- 答えるために必要な確認
 
-Japanese output will use a concise writing guide inspired by ASD-STE100: one idea per sentence, consistent terms, explicit subjects, and clear conditions. ASD-STE100 is an English-language standard; this project does not claim Japanese-language compliance with it.
+解決済みの問いは、未解決のリストに残しません。
 
-## Why “Narke”?
+## 日本語の文体
 
-Ancient Greek *narkē* (νάρκη) refers to numbness and to an electric fish that causes it. The scientific genus name *Narke* comes from this word.
+日本語では、ASD-STE100の考え方を参考にします。次の方針を使います。
 
-In Plato's *Meno*, Socrates is compared to an electric ray because his questions leave others perplexed. He also acknowledges his own perplexity. Narke carries that idea into document review: pause assumed understanding, make uncertainty explicit, and continue the inquiry together.
+- 一文一義にする
+- 文を短くする
+- 主語を明示する
+- 用語を統一する
+- 曖昧な指示語を減らす
+- 重要な条件や区別を省略しない
 
-The gadfly, electric ray, and midwife guide the design: question assumptions, interrupt premature certainty, and help understanding take shape.
+ASD-STE100は英語用の規格です。このプロジェクトは、公式の日本語版への準拠や規格適合を主張しません。
 
-## Compatibility
+## 名前の由来
 
-The project will use a shared `SKILL.md` as its core. Installation and invocation instructions for Claude Code and Codex will be added after implementation and verification.
+古代ギリシャ語のνάρκη（narkē）は、「しびれ」と、しびれを起こす電気魚を指します。学名の*Narke*も、この語に由来します。
 
-## License
+プラトンの『メノン』では、ソクラテスは相手を立ち止まらせる電気魚にたとえられます。Narkeは、その問いによって早すぎる理解を止め、不確実な点を明らかにし、対話を続けるという考えを表します。
 
-MIT. Commercial use, modification, and redistribution are permitted, provided the copyright and permission notices are retained. See [LICENSE](LICENSE).
+あぶのように前提を問い、シビレエイのように自明に見える理解を止め、産婆術のように理解が形になることを助けます。
 
-## References
+## 対応環境
+
+共通部分は `SKILL.md` を中心に構成します。Claude CodeとCodexでは、配置方法と呼び出し方を分けて扱います。
+
+対応方法は、実装後にそれぞれ検証します。検証していないインストール手順は、READMEに記載しません。
+
+## ライセンス
+
+MIT Licenseです。著作権表示と許諾表示を保持することを条件に、商用利用、改変、再配布ができます。詳細は[LICENSE](LICENSE)を参照してください。
+
+## 参考資料
 
 - [Plato, Meno](https://classics.mit.edu/Plato/meno.html)
 - [The ETYFish Project: Narkidae](https://etyfish.org/narkidae/)
